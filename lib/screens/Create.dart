@@ -1,24 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:parking_spot/models/ParkingSpot.dart';
 
 import '../components/Header.dart';
 import '../components/Menu.dart';
 import '../controllers/ParkingSpot.dart';
-
-// Create a Create Page that will be used to create a Parking Spot
-// The Parking Spot need the following information:
-// - parkingSpotNumber: String
-// - licensePlateCar: String
-// - brandCar: String
-// - modelCar: String
-// - colorCar: String
-// - responsibleName: String
-// - apartament: String
-// - block: String
-
-// The page will have a simple form with an input per field
-// At the end of form will have a button to submit the form
 
 class Create extends StatelessWidget {
   @override
@@ -34,7 +22,7 @@ class Create extends StatelessWidget {
     final _apartamentController = TextEditingController();
     final _blockController = TextEditingController();
 
-    var parkingSpotController = ParkingSpotController();
+    var controller = ParkingSpotController.parkingSpotController;
 
     // Create TextFormField validators
     String? validateFormField(String value) {
@@ -46,36 +34,43 @@ class Create extends StatelessWidget {
 
     // Create a handle to submit the form
     void handleSubmit() async {
-      if (_formKey.currentState!.validate()) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Processing Data')));
-      }
-
-      ParkingSpot parkingSpot = ParkingSpot(
-        id: "",
-        registrationDate: "",
-        parkingSpotNumber: _parkingSpotNumberController.text,
-        licensePlateCar: _licensePlateCarController.text,
-        brandCar: _brandCarController.text,
-        modelCar: _modelCarController.text,
-        colorCar: _colorCarController.text,
-        responsibleName: _responsibleNameController.text,
-        apartament: _apartamentController.text,
-        block: _blockController.text,
+      ParkingSpotModel parkingSpot = ParkingSpotModel(
+          "",
+          _parkingSpotNumberController.text,
+          _licensePlateCarController.text,
+          _brandCarController.text,
+          _modelCarController.text,
+          _colorCarController.text,
+          "",
+          _responsibleNameController.text,
+          _apartamentController.text,
+          _blockController.text
       );
 
-      print(parkingSpot);
+      var response =  await controller.post(parkingSpot);
 
-      var response = await parkingSpotController.createParkingSpot(parkingSpot);
+      if(response != false){
 
-      print(response);
+        Get.snackbar(
+          "Sucesso",
+          "Salvo com Sucesso",
+          icon: Icon(Icons.check, color: Colors.white),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.lightGreen,
+          colorText: Colors.white,
 
-      if (response != null) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Parking Spot created')));
-      } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error creating Parking Spot')));
+        );
+
+      }else{
+        Get.snackbar(
+            "Houve um erro",
+            "Deu ruim",
+            icon: Icon(Icons.error, color: Colors.white),
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.blue,
+            //   borderColor: Colors.blue
+            colorText: Colors.white
+        );
       }
     }
 

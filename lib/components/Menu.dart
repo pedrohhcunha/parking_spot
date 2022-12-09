@@ -32,24 +32,6 @@ Widget Menu(BuildContext context){
               },
             ),
             ListTile(
-              title: Text("Edit"),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Edit()),
-                );
-              },
-            ),
-            ListTile(
-              title: Text("Details"),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Details()),
-                );
-              },
-            ),
-            ListTile(
               title: Text("Create"),
               onTap: () {
                 Navigator.push(

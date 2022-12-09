@@ -1,38 +1,38 @@
-// Create a model to represent a parking spot
-// A parking spot has the following information:
-// - parkingSpotNumber: String
-// - licensePlateCar: String
-// - brandCar: String
-// - modelCar: String
-// - colorCar: String
-// - responsibleName: String
-// - apartament: String
-// - block: String
+class ParkingSpotModel {
 
-class ParkingSpot {
-  String? id;
-  String? parkingSpotNumber;
-  String? licensePlateCar;
-  String? brandCar;
-  String? modelCar;
-  String? colorCar;
-  String? responsibleName;
-  String? apartament;
-  String? block;
-  String? registrationDate;
+  final String id;
+  final String parkingSpotNumber;
+  final String licensePlateCar;
+  final String brandCar;
+  final String modelCar;
+  final String colorCar;
+  final String registrationDate;
+  final String responsibleName;
+  final String apartment;
+  final String block;
 
-  ParkingSpot({
-    this.id,
-    this.parkingSpotNumber,
-    this.licensePlateCar,
-    this.brandCar,
-    this.modelCar,
-    this.colorCar,
-    this.responsibleName,
-    this.apartament,
-    this.block,
-    this.registrationDate,
-  });
+
+  ParkingSpotModel(this.id, this.parkingSpotNumber,
+      this.licensePlateCar, this.brandCar,
+      this.modelCar, this.colorCar,
+      this.registrationDate, this.responsibleName,
+      this.apartment, this.block);
+
+
+  ParkingSpotModel.fromJson(Map<String, dynamic> json) :
+        id= json['id'],
+        parkingSpotNumber= json['parkingSpotNumber'],
+        licensePlateCar= json['licensePlateCar'],
+        brandCar= json['brandCar'],
+        modelCar= json['modelCar'],
+        colorCar= json['colorCar'],
+        registrationDate= json['registrationDate'],
+        responsibleName= json['responsibleName'],
+        apartment= json['apartment'],
+        block= json['block'];
+
+
+
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -41,22 +41,10 @@ class ParkingSpot {
     'brandCar': brandCar,
     'modelCar': modelCar,
     'colorCar': colorCar,
-    'responsibleName': responsibleName,
-    'apartament': apartament,
-    'block': block,
     'registrationDate': registrationDate,
+    'responsibleName': responsibleName,
+    'apartment': apartment,
+    'block': block,
   };
 
-  factory ParkingSpot.fromJson(Map<String, dynamic> json) => ParkingSpot(
-    id: json['id'],
-    parkingSpotNumber: json['parkingSpotNumber'],
-    licensePlateCar: json['licensePlateCar'],
-    brandCar: json['brandCar'],
-    modelCar: json['modelCar'],
-    colorCar: json['colorCar'],
-    responsibleName: json['responsibleName'],
-    apartament: json['apartament'],
-    block: json['block'],
-    registrationDate: json['registrationDate'],
-  );
 }

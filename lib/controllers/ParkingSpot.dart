@@ -1,13 +1,50 @@
-// Create controller to handle the parking spot creation
-// The controller will call a service to connect into API
-import 'package:parking_spot/services/ParkingStop.dart';
+import 'package:get/get.dart';
 
 import '../models/ParkingSpot.dart';
+import '../services/ParkingStop.dart';
 
-class ParkingSpotController {
+class ParkingSpotController extends GetxController {
+
     ParkingSpotService parkingSpotService = ParkingSpotService();
+    var isLoading = false.obs;
+    var listParkingSpotObs = <ParkingSpotModel>[].obs;
 
-    Future<ParkingSpot> createParkingSpot(ParkingSpot parkingSpot) async {
-        return await parkingSpotService.createParkingSpot(parkingSpot);
+    static ParkingSpotController get parkingSpotController => Get.find();
+
+    Future<dynamic> listParkingSpot()  async {
+        isLoading.value = true;
+        var list = await parkingSpotService.fetchListParkingSpot();
+        listParkingSpotObs.value = list.listParkingSpotModel;
+        isLoading.value = false;
+        update();
+        return listParkingSpotObs;
     }
+
+
+    Future<dynamic> post(ParkingSpotModel objeto)  async {
+        isLoading.value = true;
+        var list = await parkingSpotService.fetchPostGarage(objeto);
+        isLoading.value = false;
+        update();
+        return list;
+    }
+
+    Future<dynamic> deleteParkingSpot(ParkingSpotModel objeto)  async {
+        isLoading.value = true;
+        var list = await parkingSpotService.fetchDeleteGarage(objeto);
+        isLoading.value = false;
+        listParkingSpot();
+    }
+
+    Future<dynamic> editParkingSpot(ParkingSpotModel objeto)  async {
+        isLoading.value = true;
+        var list = await parkingSpotService.fetchEditGarage(objeto);
+        isLoading.value = false;
+        listParkingSpot();
+    }
+
+
+
+
 }
+

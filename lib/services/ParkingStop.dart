@@ -1,28 +1,79 @@
-// Create a service to handle the parking spot creation and list
-// The service will call the API to create and list parking spots
-
 import 'dart:convert';
 
-import '../models/ParkingSpot.dart';
 
 import 'package:http/http.dart' as http;
 
-class ParkingSpotService {
+import '../models/ParkingSpot.dart';
+import '../models/ParkingSpotList.dart';
 
-  String base_url = 'https://controle-vaga.herokuapp.com/parking-spot';
 
-  Future<ParkingSpot> createParkingSpot(ParkingSpot parkingSpot) async {
-    final response = await http.post(
-      Uri.parse(base_url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(parkingSpot.toJson()),
-    );
-    if (response.statusCode == 201) {
-      return ParkingSpot.fromJson(jsonDecode(response.body));
+class ParkingSpotService{
+
+  String urlGetListParkingSpot = "https://controle-vaga.herokuapp.com/parking-spot";
+  String salvar = "https://controle-vaga.herokuapp.com/parking-spot";
+  String edit = "https://controle-vaga.herokuapp.com/parking-spot/edit";
+
+  dynamic _response;
+  ParkingSpotService(){
+    _response="";
+  }
+
+  Future<ParkingSpotList> fetchListParkingSpot() async {
+    _response = await http.get(Uri.parse(urlGetListParkingSpot));
+    if (_response.statusCode == 200) {
+      // Map<String, dynamic> retorno = json.decode(_response.body);
+      // _response = await http.post(Uri.parse(urlGarage),body: jsonEncode(garage));
+      List<dynamic> list = json.decode(_response.body);
+      return ParkingSpotList.fromJson(list);
     } else {
-      throw Exception('Failed to create parking spot.');
+      throw Exception('Failed to load cote');
     }
   }
+
+  //create a fetch to delete
+  Future<dynamic> fetchDeleteGarage(ParkingSpotModel objeto) async {
+    _response = await http.delete(Uri.parse(salvar+"/"+objeto.id.toString()));
+    if (_response.statusCode == 200) {
+      return _response.body;
+    } else {
+      throw Exception('Failed to load cote');
+    }
+  }
+
+  Future<dynamic> fetchEditGarage(ParkingSpotModel objeto) async {
+    _response = await http.post(Uri.parse(edit),body: json.encode(objeto.toJson()),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json"
+        }
+    );
+    if (_response.statusCode == 200 || _response.statusCode == 201) {
+      return _response.body;
+    } else {
+      return false;
+    }
+  }
+
+  Future<dynamic> fetchPostGarage(ParkingSpotModel garage) async {
+    _response = await http.post(Uri.parse(salvar),body: json.encode(garage.toJson()) ,
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json"
+        }
+    );
+    if (_response.statusCode == 200 || _response.statusCode == 201) {
+      Map<String, dynamic> retorno = json.decode(_response.body);
+      return ParkingSpotModel.fromJson(retorno) ;
+    } else {
+      return false;
+    }
+
+  }
 }
+
+
+
+
+
+
+
